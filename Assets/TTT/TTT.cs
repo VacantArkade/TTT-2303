@@ -50,14 +50,7 @@ public class TTT : MonoBehaviour
             return;
         }
 
-        if (cells[1,1].current == PlayerOption.NONE)
-        {
-            if (cells[0, 0].current == PlayerOption.X || cells[0, 2].current == PlayerOption.X || cells[2, 0].current == PlayerOption.X || cells[2, 2].current == PlayerOption.X)
-            {
-                ChooseSpace(1, 1);
-                return;
-            }
-        }
+        
 
         for (int check = 0; check < 2; check++)
         {
@@ -90,6 +83,15 @@ public class TTT : MonoBehaviour
                 }
             }
             look = (look == PlayerOption.X) ? PlayerOption.O : PlayerOption.X;
+        }
+
+        if (cells[1, 1].current == PlayerOption.NONE)
+        {
+            if (cells[0, 0].current == PlayerOption.X || cells[0, 2].current == PlayerOption.X || cells[2, 0].current == PlayerOption.X || cells[2, 2].current == PlayerOption.X)
+            {
+                ChooseSpace(1, 1);
+                return;
+            }
         }
 
         //If no winning move, pick first available space
