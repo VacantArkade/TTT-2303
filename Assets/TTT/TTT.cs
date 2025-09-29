@@ -41,7 +41,70 @@ public class TTT : MonoBehaviour
 
     public void MakeOptimalMove()
     {
-        //ChooseSpace(OptimizeCheck());
+        PlayerOption look = currentPlayer;
+
+        //First move is always top left
+        if (freshGame)
+        {
+            ChooseSpace(0, 0);
+            return;
+        }
+
+        if (cells[1,1].current == PlayerOption.NONE)
+        {
+            if (cells[0, 0].current == PlayerOption.X || cells[0, 2].current == PlayerOption.X || cells[2, 0].current == PlayerOption.X || cells[2, 2].current == PlayerOption.X)
+            {
+                ChooseSpace(1, 1);
+                return;
+            }
+        }
+
+        for (int check = 0; check < 2; check++)
+        {
+            //Check if there's a winning move
+            PlayerOption winner = GetWinner();
+            if (winner == PlayerOption.NONE)
+            {
+                //Find the winning or blocking move and make it
+                for (int i = 0; i < Rows; i++)
+                {
+                    for (int j = 0; j < Columns; j++)
+                    {
+                        if (cells[j, i].current == PlayerOption.NONE)
+                        {
+                            cells[j, i].current = look;
+                            //ChooseSpace(j, i);
+                            Debug.Log("Checking " + j + ", " + i);
+                            if (GetWinner() == look)
+                            {
+                                cells[j, i].current = PlayerOption.NONE;
+                                ChooseSpace(j, i);
+                                return;
+                            }
+                            else
+                            {
+                                cells[j, i].current = PlayerOption.NONE;
+                            }
+                        }
+                    }
+                }
+            }
+            look = (look == PlayerOption.X) ? PlayerOption.O : PlayerOption.X;
+        }
+
+        //If no winning move, pick first available space
+        for (int i = 0; i < Rows; i++)
+        {
+            for (int j = 0; j < Columns; j++)
+            {
+                if (cells[j, i].current == PlayerOption.NONE)
+                {
+                    ChooseSpace(j, i);
+                    return;
+                }
+            }
+        }
+
     }
 
     public void ChooseSpace(int column, int row)
@@ -172,7 +235,7 @@ public class TTT : MonoBehaviour
     }
 
     //My code
-    public PlayerOption OptimizeCheck()
+    /*public PlayerOption OptimizeCheck()
     {
         // sum each row/column based on what's in each cell X = 1, O = -1, blank = 0
         // we have a winner if the sum = 3 (X) or -3 (O)
@@ -266,5 +329,5 @@ public class TTT : MonoBehaviour
             return PlayerOption.O;
 
         return PlayerOption.NONE;
-    }
+    }*/
 }
